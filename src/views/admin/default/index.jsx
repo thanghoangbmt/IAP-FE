@@ -97,6 +97,7 @@ export default function UserReports(props) {
   const [data, setData] = useState(null);
   const [dataTrend, setDataTrend] = useState(null);
   const allEventsRef = useRef(null);
+  const [allLogs, setAllLogs] = useState(null);
 
   useEffect(() => {
     const logTrendData = {
@@ -143,13 +144,13 @@ export default function UserReports(props) {
   }, [search]);
 
   useEffect(() => {
-    if (data && allEventsRef.current === null) {
-      allEventsRef.current = data.total;
+    if (data != null) {
+      setAllLogs(data.total);
     }
   }, [data]);
 
 
-  if (data != null && dataTrend != null) {
+  if (data != null && dataTrend != null && allLogs != null) {
     const getDistinctDevice = () => {
       const logLines = data.lines;
       const distinctDeviceNames = new Set();
@@ -183,8 +184,6 @@ export default function UserReports(props) {
 
     let newData = [];
 
-    console.log(search);
-    console.log(data.lines);
 
     if (search.deviceName == "All" || typeof search.deviceName === 'undefined' || search.deviceName == null) {
       newData = data.lines; 
@@ -213,7 +212,7 @@ export default function UserReports(props) {
                 />
               }
               name="All Syslog Events"
-              value={data.total}
+              value={allLogs}
             />
             <MiniStatistics
               startContent={
@@ -295,7 +294,7 @@ export default function UserReports(props) {
                 />
               }
               name="All Events"
-              value={allEventsRef.current}
+              value={allLogs}
             />
             <MiniStatistics
               startContent={
